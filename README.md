@@ -1,2 +1,3 @@
-# tappy-wizard
-Clone of "Flappy Bird"
+# tappy_wizard
+
+A new Flutter project.
