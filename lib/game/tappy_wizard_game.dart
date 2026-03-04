@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'dart:ui' as ui;
 
-import '../entities/background.dart';
 import '../entities/ground.dart';
 import '../entities/pipe_manager.dart';
 import '../entities/wizard.dart';
@@ -39,7 +38,6 @@ class _TappyWizardGameState extends State<TappyWizardGame>
   Duration _lastTick = Duration.zero;
 
   // ── Entities ─────────────────────────────────────
-  final Background _background = Background();
   final Ground _ground = Ground();
   late final PipeManager _pipes;
   late Wizard _wizard;
@@ -117,7 +115,7 @@ class _TappyWizardGameState extends State<TappyWizardGame>
       _initialized = true;
     }
 
-    _background.update(dt, size);
+    // Background is now a static image widget — no update needed.
 
     if (_state == GameState.playing) {
       _wizard.update(dt);
@@ -182,7 +180,6 @@ class _TappyWizardGameState extends State<TappyWizardGame>
     _wizard.reset(size);
     _pipes.reset();
     _ground.reset();
-    _background.reset();
     widget.scoreService.resetScore();
     _state = GameState.menu;
     _initialized = false;
@@ -201,11 +198,18 @@ class _TappyWizardGameState extends State<TappyWizardGame>
       onTap: _handleTap,
       child: Stack(
         children: [
-          // Game canvas
+          // Background image
+          Positioned.fill(
+            child: Image.asset(
+              'assets/images/background.png',
+              fit: BoxFit.cover,
+            ),
+          ),
+
+          // Game canvas (transparent so image shows through)
           Positioned.fill(
             child: CustomPaint(
               painter: _GamePainter(
-                background: _background,
                 ground: _ground,
                 pipes: _pipes,
                 wizard: _wizard,
@@ -243,14 +247,12 @@ class _TappyWizardGameState extends State<TappyWizardGame>
 
 // ── Custom Painter ──────────────────────────────────
 class _GamePainter extends CustomPainter {
-  final Background background;
   final Ground ground;
   final PipeManager pipes;
   final Wizard wizard;
   final GameState state;
 
   _GamePainter({
-    required this.background,
     required this.ground,
     required this.pipes,
     required this.wizard,
@@ -259,13 +261,10 @@ class _GamePainter extends CustomPainter {
 
   @override
   void paint(ui.Canvas canvas, ui.Size size) {
-    background.render(canvas, size);
     pipes.render(canvas);
     ground.render(canvas, size);
-    if (state != GameState.menu || true) {
-      // Always draw wizard so player sees it on the menu too
-      wizard.render(canvas, size);
-    }
+    // Always draw wizard so player sees it on the menu too
+    wizard.render(canvas, size);
   }
 
   @override
