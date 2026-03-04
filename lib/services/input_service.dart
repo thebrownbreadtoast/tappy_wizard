@@ -23,7 +23,7 @@ class InputService extends StatelessWidget {
         }
       },
       child: GestureDetector(
-        onTap: onTap,
+        onTapDown: (_) => onTap(),
         behavior: HitTestBehavior.opaque,
         child: child,
       ),

@@ -4,7 +4,7 @@ class GameConstants {
   // ── Physics ──────────────────────────────────────
   static const double defaultGravity = 1600.0;
   static const double defaultFlapForce = -500.0;
-  static const double defaultMaxFallSpeed = 800.0;
+  static const double defaultMaxFallSpeed = 600.0;
 
   // ── Wizard ───────────────────────────────────────
   static const double wizardWidth = 40.0;

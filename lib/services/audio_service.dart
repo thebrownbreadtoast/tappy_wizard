@@ -15,6 +15,8 @@ class AudioService {
   Future<void> playFlap() => _play(_flapPlayer, 'sounds/jump.mp3');
   Future<void> playScore() => _play(_scorePlayer, 'sounds/pass.mp3');
   Future<void> playHit() => _play(_hitPlayer, 'sounds/crash.mp3');
+  Future<void> playLife() => _play(_hitPlayer, 'sounds/life.mp3');
+  Future<void> playSpell() => _play(_hitPlayer, 'sounds/spell.mp3');
 
   Future<void> startBgm() async {
     if (!enabled) return;
