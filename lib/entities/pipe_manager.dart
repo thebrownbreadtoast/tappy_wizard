@@ -15,8 +15,12 @@ class PipeManager {
   /// Current speed — may increase with difficulty.
   late double speed;
 
+  /// Current gap — narrows with score.
+  late double currentGap;
+
   PipeManager({required this.config}) {
     speed = GameConstants.defaultPipeSpeed;
+    currentGap = config.pipeGap;
   }
 
   // ── Difficulty scaling ───────────────────────────
@@ -25,6 +29,13 @@ class PipeManager {
         (GameConstants.defaultPipeSpeed +
                 score * GameConstants.speedIncreasePerPoint)
             .clamp(0, GameConstants.maxPipeSpeed);
+
+    // Gap scaling: starts at config.pipeGap, narrows -10 every 10 points
+    final double gapDecrease = (score ~/ 10) * 10.0;
+    currentGap = (config.pipeGap - gapDecrease).clamp(
+      GameConstants.minPipeGap,
+      config.pipeGap,
+    );
   }
 
   // ── Update ───────────────────────────────────────
@@ -52,10 +63,9 @@ class PipeManager {
   double _spawn(ui.Size screenSize) {
     final double playableHeight =
         screenSize.height - GameConstants.groundHeight;
-    final double minCenter =
-        GameConstants.pipeMinTopHeight + config.pipeGap / 2;
+    final double minCenter = GameConstants.pipeMinTopHeight + currentGap / 2;
     final double maxCenter =
-        playableHeight - GameConstants.pipeBottomPadding - config.pipeGap / 2;
+        playableHeight - GameConstants.pipeBottomPadding - currentGap / 2;
     final double gapCenter =
         minCenter + _random.nextDouble() * (maxCenter - minCenter);
 
@@ -63,7 +73,7 @@ class PipeManager {
       PipePair(
         x: screenSize.width,
         gapCenterY: gapCenter,
-        gap: config.pipeGap,
+        gap: currentGap,
         screenHeight: screenSize.height,
       ),
     );
@@ -81,6 +91,7 @@ class PipeManager {
     pipes.clear();
     _timeSinceLastSpawn = 0;
     speed = GameConstants.defaultPipeSpeed;
+    currentGap = config.pipeGap;
   }
 
   /// Removes the specified number of pipes that are ahead of the wizard.

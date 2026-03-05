@@ -8,14 +8,20 @@ class SettingsService {
   static const _flapForceKey = 'physics_flap_force';
   static const _pipeGapKey = 'physics_pipe_gap';
 
+  static const _bgmMutedKey = 'bgm_muted';
+
   SharedPreferences? _prefs;
   late PhysicsConfig _config;
+  bool _bgmMuted = false;
 
   PhysicsConfig get config => _config;
+  bool get bgmMuted => _bgmMuted;
 
   /// Loads settings from disk or uses defaults.
   Future<void> init() async {
     _prefs = await SharedPreferences.getInstance();
+
+    _bgmMuted = _prefs?.getBool(_bgmMutedKey) ?? false;
 
     _config = PhysicsConfig(
       gravity: _prefs?.getDouble(_gravityKey) ?? GameConstants.defaultGravity,
@@ -44,5 +50,11 @@ class SettingsService {
       pipeGap: GameConstants.defaultPipeGap,
     );
     await updateConfig(defaults);
+  }
+
+  /// Toggles and persists the BGM mute state.
+  Future<void> setBgmMuted(bool muted) async {
+    _bgmMuted = muted;
+    await _prefs?.setBool(_bgmMutedKey, muted);
   }
 }

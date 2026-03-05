@@ -20,7 +20,9 @@ class Hud extends StatelessWidget {
             child: Text(
               '$score',
               style: TextStyle(
-                fontSize: 64,
+                fontFamily: 'MagicSchoolOne',
+                fontSize: 80,
+                letterSpacing: 4.0,
                 fontWeight: FontWeight.w900,
                 color: Colors.white,
                 shadows: [
@@ -29,7 +31,7 @@ class Hud extends StatelessWidget {
                     blurRadius: 8,
                     offset: const Offset(2, 2),
                   ),
-                  const Shadow(color: Colors.purpleAccent, blurRadius: 16),
+                  // const Shadow(color: Colors.purpleAccent, blurRadius: 16),
                 ],
               ),
             ),
@@ -40,18 +42,18 @@ class Hud extends StatelessWidget {
           top: 48,
           left: 24,
           child: Row(
-            children: [
-              const Icon(Icons.favorite, color: Colors.redAccent, size: 28),
-              const SizedBox(width: 8),
-              Text(
-                '$lives',
-                style: const TextStyle(
-                  fontSize: 28,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.white,
+            children: List.generate(
+              lives,
+              (index) => const Padding(
+                padding: EdgeInsets.only(right: 6),
+                child: Icon(
+                  Icons.favorite,
+                  color: Colors.redAccent,
+                  size: 28,
+                  shadows: [Shadow(color: Colors.white10, blurRadius: 8)],
                 ),
               ),
-            ],
+            ),
           ),
         ),
       ],

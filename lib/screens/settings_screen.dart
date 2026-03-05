@@ -36,7 +36,14 @@ class _SettingsScreenState extends State<SettingsScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Physics Settings'),
+        title: const Text(
+          'Physics Settings',
+          style: TextStyle(
+            fontFamily: 'MagicSchoolOne',
+            fontSize: 28,
+            letterSpacing: 2.0,
+          ),
+        ),
         actions: [
           IconButton(
             icon: const Icon(Icons.refresh),
@@ -80,7 +87,14 @@ class _SettingsScreenState extends State<SettingsScreen> {
               foregroundColor: Colors.white,
               padding: const EdgeInsets.symmetric(vertical: 16),
             ),
-            child: const Text('Save & Apply', style: TextStyle(fontSize: 18)),
+            child: const Text(
+              'Save & Apply',
+              style: TextStyle(
+                fontFamily: 'MagicSchoolOne',
+                fontSize: 22,
+                letterSpacing: 2.0,
+              ),
+            ),
           ),
         ],
       ),
@@ -103,11 +117,21 @@ class _SettingsScreenState extends State<SettingsScreen> {
           children: [
             Text(
               label,
-              style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+              style: const TextStyle(
+                fontFamily: 'MagicSchoolOne',
+                fontSize: 20,
+                letterSpacing: 1.5,
+                fontWeight: FontWeight.bold,
+              ),
             ),
             Text(
               value.toStringAsFixed(1),
-              style: const TextStyle(color: Colors.purpleAccent),
+              style: const TextStyle(
+                fontFamily: 'MagicSchoolOne',
+                fontSize: 20,
+                letterSpacing: 1.0,
+                color: Colors.purpleAccent,
+              ),
             ),
           ],
         ),

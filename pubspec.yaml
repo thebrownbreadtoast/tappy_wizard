@@ -22,3 +22,9 @@ flutter:
   assets:
     - assets/images/
     - assets/sounds/
+    - assets/fonts/
+
+  fonts:
+    - family: MagicSchoolOne
+      fonts:
+        - asset: assets/fonts/MagicSchoolOne.ttf

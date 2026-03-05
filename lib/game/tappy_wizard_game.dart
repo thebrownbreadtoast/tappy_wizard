@@ -55,8 +55,8 @@ class _TappyWizardGameState extends State<TappyWizardGame>
   bool _initialized = false;
   bool _isPaused = false;
   int _lastPowerUpMilestone = 0;
-  PowerUpType? _queuedPowerUp;
-  int _pipesToSkip = 0;
+  final List<PowerUpType> _powerUpQueue = [];
+  int _pipesToSkipForNext = 0;
 
   @override
   void initState() {
@@ -65,6 +65,7 @@ class _TappyWizardGameState extends State<TappyWizardGame>
     _pipes = PipeManager(config: widget.settingsService.config);
     _wizard = Wizard(x: 0, y: 0, config: widget.settingsService.config);
     _ticker = createTicker(_onTick)..start();
+    _audio.isBgmMuted = widget.settingsService.bgmMuted;
     _audio.startBgm();
     _loadImages();
   }
@@ -113,6 +114,19 @@ class _TappyWizardGameState extends State<TappyWizardGame>
     _audio.resumeBgm();
   }
 
+  void _toggleBgm() {
+    setState(() {
+      final isMuted = !_audio.isBgmMuted;
+      _audio.isBgmMuted = isMuted;
+      widget.settingsService.setBgmMuted(isMuted);
+      if (isMuted) {
+        _audio.stopBgm();
+      } else {
+        _audio.startBgm();
+      }
+    });
+  }
+
   // ── Tick ──────────────────────────────────────────
   void _onTick(Duration elapsed) {
     if (_isPaused) {
@@ -145,12 +159,14 @@ class _TappyWizardGameState extends State<TappyWizardGame>
       _powerUps.update(dt, _pipes.speed);
 
       // Handle Queued Power-up Spawning
-      if (spawnedGapY != null && _queuedPowerUp != null) {
-        if (_pipesToSkip > 0) {
-          _pipesToSkip--;
+      if (spawnedGapY != null && _powerUpQueue.isNotEmpty) {
+        if (_pipesToSkipForNext > 0) {
+          _pipesToSkipForNext--;
         } else {
-          _powerUps.spawnAtY(size, _queuedPowerUp!, spawnedGapY);
-          _queuedPowerUp = null;
+          _powerUps.spawnAtY(size, _powerUpQueue.removeAt(0), spawnedGapY);
+          if (_powerUpQueue.isNotEmpty) {
+            _pipesToSkipForNext = Random().nextInt(3) + 1; // Skip 1 to 3 pipes
+          }
         }
       }
 
@@ -215,19 +231,25 @@ class _TappyWizardGameState extends State<TappyWizardGame>
   }
 
   void _rollForPowerUp(ui.Size size) {
-    final rand = Random().nextDouble();
-    if (rand < 0.20) {
-      _queuedPowerUp = PowerUpType.magicSpell;
-      _pipesToSkip = Random().nextInt(3); // 0, 1, or 2
-    } else if (rand < 0.10) {
-      _queuedPowerUp = PowerUpType.extraLife;
-      _pipesToSkip = Random().nextInt(3); // 0, 1, or 2
+    final randLife = Random().nextDouble();
+    final randSpell = Random().nextDouble();
+    final initialLength = _powerUpQueue.length;
+
+    if (randLife < 0.20) {
+      _powerUpQueue.add(PowerUpType.extraLife);
+    }
+    if (randSpell < 0.30) {
+      _powerUpQueue.add(PowerUpType.magicSpell);
+    }
+
+    if (initialLength == 0 && _powerUpQueue.isNotEmpty) {
+      _pipesToSkipForNext = Random().nextInt(5); // 0, 1, 2, 3, or 4
     }
   }
 
   void _applyPowerUp(PowerUp pu) {
     if (pu.type == PowerUpType.extraLife) {
-      _wizard.lives++;
+      if (_wizard.lives < 3) _wizard.lives++;
       _audio.playLife();
     } else {
       _pipes.removeNextPipes(4);
@@ -261,8 +283,8 @@ class _TappyWizardGameState extends State<TappyWizardGame>
     _ground.reset();
     _powerUps.reset();
     _lastPowerUpMilestone = 0;
-    _queuedPowerUp = null;
-    _pipesToSkip = 0;
+    _powerUpQueue.clear();
+    _pipesToSkipForNext = 0;
     widget.scoreService.resetScore();
     _state = GameState.menu;
     _initialized = false;
@@ -312,6 +334,8 @@ class _TappyWizardGameState extends State<TappyWizardGame>
               highScore: widget.scoreService.highScore,
               onStart: _handleTap,
               settingsService: widget.settingsService,
+              bgmMuted: _audio.isBgmMuted,
+              onToggleBgm: _toggleBgm,
               onOpenSettings: _pauseGame,
               onCloseSettings: _resumeGame,
             ),

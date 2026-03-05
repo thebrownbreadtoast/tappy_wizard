@@ -23,7 +23,12 @@ class Wizard {
   Wizard({required this.x, required this.y, required this.config});
 
   // ── Bounding box ─────────────────────────────────
-  Rect get rect => Rect.fromLTWH(x, y, width, height);
+  Rect get rect => Rect.fromLTWH(
+    x + GameConstants.wizardHitboxInset,
+    y + GameConstants.wizardHitboxInset,
+    width - (GameConstants.wizardHitboxInset * 2),
+    height - (GameConstants.wizardHitboxInset * 2),
+  );
 
   int lives = 1;
   bool isInvincible = false;

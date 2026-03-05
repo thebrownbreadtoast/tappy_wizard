@@ -25,13 +25,15 @@ class GameOverScreen extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           // Title
-          const Text(
+          Text(
             'Game Over',
-            style: TextStyle(
-              fontSize: 40,
+            style: const TextStyle(
+              fontFamily: 'MagicSchoolOne',
+              fontSize: 60,
+              letterSpacing: 4.0,
               fontWeight: FontWeight.w900,
-              color: Colors.redAccent,
-              shadows: [Shadow(color: Colors.red, blurRadius: 20)],
+              color: Colors.white,
+              shadows: [Shadow(color: Colors.white30, blurRadius: 20)],
             ),
           ),
           const SizedBox(height: 28),
@@ -48,33 +50,39 @@ class GameOverScreen extends StatelessWidget {
                 Text(
                   '$score',
                   style: const TextStyle(
-                    fontSize: 56,
+                    fontFamily: 'MagicSchoolOne',
+                    fontSize: 72,
+                    letterSpacing: 4.0,
                     fontWeight: FontWeight.w900,
                     color: Colors.white,
                   ),
                 ),
-                const Text(
+                Text(
                   'SCORE',
-                  style: TextStyle(
-                    fontSize: 14,
+                  style: const TextStyle(
+                    fontFamily: 'MagicSchoolOne',
+                    fontSize: 18,
                     color: Colors.white54,
-                    letterSpacing: 4,
+                    letterSpacing: 8,
                   ),
                 ),
                 const SizedBox(height: 12),
                 Text(
                   '🏆  Best: $highScore',
                   style: const TextStyle(
-                    fontSize: 18,
+                    fontFamily: 'MagicSchoolOne',
+                    fontSize: 22,
+                    letterSpacing: 1.5,
                     color: Colors.amberAccent,
                     fontWeight: FontWeight.w600,
                   ),
                 ),
                 if (isNewHighScore) ...[
                   const SizedBox(height: 8),
-                  const Text(
+                  Text(
                     '🎉 New High Score!',
-                    style: TextStyle(
+                    style: const TextStyle(
+                      fontFamily: 'MagicSchoolOne',
                       fontSize: 16,
                       color: Colors.greenAccent,
                       fontWeight: FontWeight.bold,
@@ -99,7 +107,9 @@ class GameOverScreen extends StatelessWidget {
                 borderRadius: BorderRadius.circular(30),
               ),
               textStyle: const TextStyle(
-                fontSize: 18,
+                fontFamily: 'MagicSchoolOne',
+                fontSize: 22,
+                letterSpacing: 2.0,
                 fontWeight: FontWeight.w700,
               ),
             ),

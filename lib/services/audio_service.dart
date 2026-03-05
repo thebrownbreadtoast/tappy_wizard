@@ -11,6 +11,7 @@ class AudioService {
   final AudioPlayer _bgmPlayer = AudioPlayer();
 
   bool enabled = true;
+  bool isBgmMuted = false;
 
   Future<void> playFlap() => _play(_flapPlayer, 'sounds/jump.mp3');
   Future<void> playScore() => _play(_scorePlayer, 'sounds/pass.mp3');
@@ -19,7 +20,7 @@ class AudioService {
   Future<void> playSpell() => _play(_hitPlayer, 'sounds/spell.mp3');
 
   Future<void> startBgm() async {
-    if (!enabled) return;
+    if (!enabled || isBgmMuted) return;
     try {
       await _bgmPlayer.setReleaseMode(ReleaseMode.loop);
       await _bgmPlayer.play(AssetSource('sounds/bgm.mp3'));
@@ -35,7 +36,7 @@ class AudioService {
   }
 
   Future<void> resumeBgm() async {
-    if (!enabled) return;
+    if (!enabled || isBgmMuted) return;
     await _bgmPlayer.resume();
   }
 

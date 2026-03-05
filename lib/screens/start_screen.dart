@@ -9,12 +9,16 @@ class StartScreen extends StatelessWidget {
   final SettingsService settingsService;
   final VoidCallback? onOpenSettings;
   final VoidCallback? onCloseSettings;
+  final bool bgmMuted;
+  final VoidCallback onToggleBgm;
 
   const StartScreen({
     super.key,
     required this.highScore,
     required this.onStart,
     required this.settingsService,
+    required this.bgmMuted,
+    required this.onToggleBgm,
     this.onOpenSettings,
     this.onCloseSettings,
   });
@@ -34,15 +38,17 @@ class StartScreen extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 // Title
-                const Text(
-                  '🧙 Tappy Wizard',
-                  style: TextStyle(
-                    fontSize: 42,
+                Text(
+                  'Tappy Wizard',
+                  style: const TextStyle(
+                    fontFamily: 'MagicSchoolOne',
+                    fontSize: 64,
+                    letterSpacing: 6.0,
                     fontWeight: FontWeight.w900,
                     color: Colors.white,
-                    shadows: [
-                      Shadow(color: Colors.purpleAccent, blurRadius: 24),
-                    ],
+                    // shadows: [
+                    //   const Shadow(color: Colors.purpleAccent, blurRadius: 24),
+                    // ],
                   ),
                 ),
                 const SizedBox(height: 28),
@@ -54,12 +60,15 @@ class StartScreen extends StatelessWidget {
                   curve: Curves.easeInOut,
                   builder: (_, opacity, child) =>
                       Opacity(opacity: opacity, child: child),
-                  child: const Text(
+                  child: Text(
                     'Tap to Start',
-                    style: TextStyle(
-                      fontSize: 22,
+                    style: const TextStyle(
+                      fontFamily: 'MagicSchoolOne',
+                      fontSize: 28,
+                      letterSpacing: 2.0,
                       color: Colors.white70,
                       fontWeight: FontWeight.w500,
+                      shadows: [Shadow(color: Colors.white30, blurRadius: 20)],
                     ),
                   ),
                 ),
@@ -79,7 +88,9 @@ class StartScreen extends StatelessWidget {
                     child: Text(
                       '🏆  Best: $highScore',
                       style: const TextStyle(
-                        fontSize: 18,
+                        fontFamily: 'MagicSchoolOne',
+                        fontSize: 22,
+                        letterSpacing: 1.5,
                         color: Colors.amberAccent,
                         fontWeight: FontWeight.w600,
                       ),
@@ -89,26 +100,46 @@ class StartScreen extends StatelessWidget {
             ),
           ),
         ),
-        // Settings Button
+        // Settings and Mute Buttons
         Positioned(
           top: 60,
           right: 24,
-          child: Material(
-            color: Colors.transparent,
-            child: IconButton(
-              icon: const Icon(Icons.settings, color: Colors.white, size: 32),
-              onPressed: () async {
-                onOpenSettings?.call();
-                await Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (_) =>
-                        SettingsScreen(settingsService: settingsService),
+          child: Row(
+            children: [
+              Material(
+                color: Colors.transparent,
+                child: IconButton(
+                  icon: Icon(
+                    bgmMuted ? Icons.volume_off : Icons.volume_up,
+                    color: Colors.white,
+                    size: 32,
                   ),
-                );
-                onCloseSettings?.call();
-              },
-            ),
+                  onPressed: onToggleBgm,
+                ),
+              ),
+              const SizedBox(width: 8),
+              Material(
+                color: Colors.transparent,
+                child: IconButton(
+                  icon: const Icon(
+                    Icons.settings,
+                    color: Colors.white,
+                    size: 32,
+                  ),
+                  onPressed: () async {
+                    onOpenSettings?.call();
+                    await Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (_) =>
+                            SettingsScreen(settingsService: settingsService),
+                      ),
+                    );
+                    onCloseSettings?.call();
+                  },
+                ),
+              ),
+            ],
           ),
         ),
       ],

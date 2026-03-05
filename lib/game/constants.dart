@@ -7,8 +7,9 @@ class GameConstants {
   static const double defaultMaxFallSpeed = 600.0;
 
   // ── Wizard ───────────────────────────────────────
-  static const double wizardWidth = 40.0;
-  static const double wizardHeight = 32.0;
+  static const double wizardWidth = 50.0;
+  static const double wizardHeight = 40.0;
+  static const double wizardHitboxInset = 6.0;
   static const double wizardStartXFraction = 0.25;
   static const double wizardStartYFraction = 0.45;
   static const double wizardTiltUp = -0.5;
@@ -16,10 +17,10 @@ class GameConstants {
 
   // ── Pipes ────────────────────────────────────────
   static const double pipeWidth = 60.0;
-  static const double defaultPipeGap = 160.0;
+  static const double defaultPipeGap = 250.0;
   static const double defaultPipeSpeed = 200.0;
   static const double defaultPipeSpawnInterval = 1.5;
-  static const double pipeMinTopHeight = 100.0;
+  static const double pipeMinTopHeight = 70.0;
   static const double pipeBottomPadding = 100.0;
 
   // ── Ground ───────────────────────────────────────
@@ -32,7 +33,7 @@ class GameConstants {
 
   // ── Difficulty scaling ───────────────────────────
   static const double speedIncreasePerPoint = 1.2; // px/s per score
-  static const double minPipeGap = 160.0;
+  static const double minPipeGap = 130.0;
   static const double maxPipeSpeed = 300.0;
 
   // ── Animation ────────────────────────────────────
