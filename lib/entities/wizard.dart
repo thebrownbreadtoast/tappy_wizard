@@ -67,6 +67,13 @@ class Wizard {
     return fallImage;
   }
 
+  // ── Render Objects (Reused to prevent pressure) ───
+  final ui.Paint _imagePaint = ui.Paint();
+  final ui.Paint _bodyPaint = ui.Paint()..color = const Color(0xFF7B2FBE);
+  final ui.Paint _hatPaint = ui.Paint()..color = const Color(0xFF3A0078);
+  final ui.Paint _eyePaint = ui.Paint()..color = const Color(0xFFFFFFFF);
+  final ui.Paint _pupilPaint = ui.Paint()..color = const Color(0xFF000000);
+
   // ── Render ───────────────────────────────────────
   void render(ui.Canvas canvas, Size screenSize) {
     // Blinking effect when invincible
@@ -98,7 +105,7 @@ class Wizard {
         width: width,
         height: height,
       );
-      canvas.drawImageRect(sprite, srcRect, dstRect, Paint());
+      canvas.drawImageRect(sprite, srcRect, dstRect, _imagePaint);
     } else {
       // Procedural fallback
       _renderFallback(canvas);
@@ -108,27 +115,23 @@ class Wizard {
   }
 
   void _renderFallback(ui.Canvas canvas) {
-    final bodyPaint = Paint()..color = const Color(0xFF7B2FBE);
     canvas.drawRRect(
-      RRect.fromRectAndRadius(
+      ui.RRect.fromRectAndRadius(
         Rect.fromCenter(center: Offset.zero, width: width, height: height),
         const Radius.circular(6),
       ),
-      bodyPaint,
+      _bodyPaint,
     );
 
-    final hatPaint = Paint()..color = const Color(0xFF3A0078);
     final hatPath = Path()
       ..moveTo(0, -height / 2 - 14)
       ..lineTo(-width / 3, -height / 2 + 2)
       ..lineTo(width / 3, -height / 2 + 2)
       ..close();
-    canvas.drawPath(hatPath, hatPaint);
+    canvas.drawPath(hatPath, _hatPaint);
 
-    final eyePaint = Paint()..color = const Color(0xFFFFFFFF);
-    canvas.drawCircle(Offset(width * 0.15, -2), 4, eyePaint);
-    final pupilPaint = Paint()..color = const Color(0xFF000000);
-    canvas.drawCircle(Offset(width * 0.2, -2), 2, pupilPaint);
+    canvas.drawCircle(Offset(width * 0.15, -2), 4, _eyePaint);
+    canvas.drawCircle(Offset(width * 0.2, -2), 2, _pupilPaint);
   }
 
   // ── Reset ────────────────────────────────────────
@@ -136,5 +139,12 @@ class Wizard {
     x = screenSize.width * GameConstants.wizardStartXFraction;
     y = screenSize.height * GameConstants.wizardStartYFraction;
     velocity = 0;
+  }
+
+  // ── Cleanup ──────────────────────────────────────
+  void dispose() {
+    jumpImage?.dispose();
+    glideImage?.dispose();
+    fallImage?.dispose();
   }
 }

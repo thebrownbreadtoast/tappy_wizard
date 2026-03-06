@@ -19,6 +19,11 @@ class PowerUp {
 
   bool get isOffScreen => x + size < 0;
 
+  // ── Reused Render Objects ────────────────────────
+  final ui.Paint _imagePaint = ui.Paint();
+  final ui.Paint _lifePaint = ui.Paint()..color = const ui.Color(0xFFFF0000);
+  final ui.Paint _spellPaint = ui.Paint()..color = const ui.Color(0xFF0000FF);
+
   void render(ui.Canvas canvas, ui.Image? image) {
     if (image != null) {
       final src = ui.Rect.fromLTWH(
@@ -27,14 +32,13 @@ class PowerUp {
         image.width.toDouble(),
         image.height.toDouble(),
       );
-      canvas.drawImageRect(image, src, rect, ui.Paint());
+      canvas.drawImageRect(image, src, rect, _imagePaint);
     } else {
       // Fallback
-      final paint = ui.Paint()
-        ..color = type == PowerUpType.extraLife
-            ? const ui.Color(0xFFFF0000)
-            : const ui.Color(0xFF0000FF);
-      canvas.drawRect(rect, paint);
+      canvas.drawRect(
+        rect,
+        type == PowerUpType.extraLife ? _lifePaint : _spellPaint,
+      );
     }
   }
 }

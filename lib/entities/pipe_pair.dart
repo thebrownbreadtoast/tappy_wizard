@@ -38,22 +38,22 @@ class PipePair {
   /// `true` when the pipe has scrolled completely off the left edge.
   bool get isOffScreen => x + GameConstants.pipeWidth < 0;
 
+  // ── Reused Render Objects ────────────────────────
+  static final ui.Paint _pipePaint = ui.Paint()
+    ..color = const ui.Color(0xFF2ECC71);
+  static final ui.Paint _edgePaint = ui.Paint()
+    ..color = const ui.Color(0xFF1B5E20)
+    ..style = ui.PaintingStyle.stroke
+    ..strokeWidth = 3;
+  static final ui.Paint _highlightPaint = ui.Paint()
+    ..color = const ui.Color(0x33FFFFFF);
+
   // ── Render ───────────────────────────────────────
   void render(ui.Canvas canvas) {
-    final pipePaint = ui.Paint()
-      ..color = const ui.Color(0xFF2ECC71); // main green
-    final edgePaint = ui.Paint()
-      ..color =
-          const ui.Color(0xFF1B5E20) // dark green stroke
-      ..style = ui.PaintingStyle.stroke
-      ..strokeWidth = 3;
-    final highlightPaint = ui.Paint()
-      ..color = const ui.Color(0x33FFFFFF); // white glow
-
     // Draw Top Pipe
-    canvas.drawRect(topRect, pipePaint);
-    canvas.drawRect(topRect, edgePaint);
-    canvas.drawRect(ui.Rect.fromLTWH(x + 5, 0, 8, _topHeight), highlightPaint);
+    canvas.drawRect(topRect, _pipePaint);
+    canvas.drawRect(topRect, _edgePaint);
+    canvas.drawRect(ui.Rect.fromLTWH(x + 5, 0, 8, _topHeight), _highlightPaint);
 
     // Top Pipe Cap
     final topCapRect = ui.Rect.fromLTWH(
@@ -64,19 +64,19 @@ class PipePair {
     );
     canvas.drawRRect(
       ui.RRect.fromRectAndRadius(topCapRect, const ui.Radius.circular(4)),
-      pipePaint,
+      _pipePaint,
     );
     canvas.drawRRect(
       ui.RRect.fromRectAndRadius(topCapRect, const ui.Radius.circular(4)),
-      edgePaint,
+      _edgePaint,
     );
 
     // Draw Bottom Pipe
-    canvas.drawRect(bottomRect, pipePaint);
-    canvas.drawRect(bottomRect, edgePaint);
+    canvas.drawRect(bottomRect, _pipePaint);
+    canvas.drawRect(bottomRect, _edgePaint);
     canvas.drawRect(
       ui.Rect.fromLTWH(x + 5, _bottomTop, 8, screenHeight - _bottomTop),
-      highlightPaint,
+      _highlightPaint,
     );
 
     // Bottom Pipe Cap
@@ -88,11 +88,11 @@ class PipePair {
     );
     canvas.drawRRect(
       ui.RRect.fromRectAndRadius(bottomCapRect, const ui.Radius.circular(4)),
-      pipePaint,
+      _pipePaint,
     );
     canvas.drawRRect(
       ui.RRect.fromRectAndRadius(bottomCapRect, const ui.Radius.circular(4)),
-      edgePaint,
+      _edgePaint,
     );
   }
 }

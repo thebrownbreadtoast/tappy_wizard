@@ -41,4 +41,9 @@ class PowerUpManager {
   void reset() {
     powerUps.clear();
   }
+
+  void dispose() {
+    lifeImage?.dispose();
+    spellImage?.dispose();
+  }
 }
